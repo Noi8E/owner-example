@@ -9,13 +9,13 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.lang.module.Configuration;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.requestSpecification;
 
-public class ExampleAPITests extends TestBase {
+public class BaztMainTests extends TestBase {
     @Test
-    @Tag("API-test")
     @DisplayName("Just verify 200 OK")
     public void checkResponseStatus() {
         apiConfig = ConfigFactory.create(APIConfig.class, System.getProperties());
@@ -27,6 +27,7 @@ public class ExampleAPITests extends TestBase {
                         .then()
                         .statusCode(200)
                 .extract().response();
+        open("")
 
     }
 

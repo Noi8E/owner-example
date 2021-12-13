@@ -1,42 +1,44 @@
 package ru.bazt;
 
+import com.codeborne.selenide.Configuration;
 import config.APIConfig;
-import config.UIConfig;
-import org.assertj.core.configuration.Configuration;
-import org.junit.jupiter.api.AfterAll;
+import config.WebLocalConfig;
+import config.WebRemoteConfig;
+import org.aeonbits.owner.ConfigFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 public class TestBase {
-    public final String mainUrl = "https://bazt.ru/";
-
-
-    public String expectedResult = "Главная";
-
-    public UIConfig uiConfig;
     public APIConfig apiConfig;
-
-//    public void setWebDriver() {
-//        if (uiConfig.getWebDriver().equals("local")) {
-//            Configuration.browser = uiConfig.getBrowser();
-//            return;
-//        }
-//        Configuration.remote = uiConfig.getRemoteUrl();
-//    }
-//
-//    public void setBrowserVersion() {
-//        Configuration.browserVersion = uiConfig.getBrowserVersion();
-//    }
 
     @BeforeAll
     static void setUp() {
+        Configuration.browserSize = "1920x1080";
 
+        if (System.getProperty("isRemote") == null) {
+            WebRemoteConfig webRemoteConfig = ConfigFactory
+                    .create(WebRemoteConfig.class, System.getProperties());
+
+            DesiredCapabilities capabilities = new DesiredCapabilities();
+            capabilities.setCapability("enableVNC", true);
+            capabilities.setCapability("enableVideo", true);
+
+            Configuration.browserCapabilities = capabilities;
+            Configuration.browser = webRemoteConfig.getBrowserName();
+            Configuration.browserVersion = webRemoteConfig.getBrowserVersion();
+            if (webRemoteConfig.getIsRemote()) {
+                String remoteLogin = webRemoteConfig.getRemoteLogin();
+                String remotePassword = webRemoteConfig.getRemotePassword();
+                String remoteUrl = webRemoteConfig.getRemoteUrl();
+                Configuration.remote = String.format("https://%s:%s@%s", remoteLogin, remotePassword, remoteUrl);
+            }
+
+
+        }
     }
 
-    @AfterEach
-    public void addAttachments() {
 
-    }
 
 
 
