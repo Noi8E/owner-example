@@ -1,34 +1,22 @@
 package ru.bazt;
 
-import config.APIConfig;
-import io.restassured.response.Response;
-import org.aeonbits.owner.Config;
-import org.aeonbits.owner.ConfigFactory;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
+
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-import java.lang.module.Configuration;
-
-import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.requestSpecification;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selectors.byName;
+import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.$;
 
 public class BaztMainTests extends TestBase {
-    @Test
-    @DisplayName("Just verify 200 OK")
-    public void checkResponseStatus() {
-        apiConfig = ConfigFactory.create(APIConfig.class, System.getProperties());
-        Response response =
-                given()
-                        .cookie(apiConfig.getCookie())
-                        .when()
-                        .get(apiConfig.getBaseUrl())
-                        .then()
-                        .statusCode(200)
-                .extract().response();
-        open("")
 
+    @Test
+    public void openMainPage() {
+        open(BAZT_URL);
+        $(".search_button").click();
+        $("#search").setValue(SEARCH_VALUE).click();
+        $x("//h2[contains(text(),'Результаты поиска:')]").shouldBe(visible);
     }
 
 

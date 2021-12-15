@@ -9,7 +9,7 @@ public interface APIConfig extends Config {
     @Key("baseUrl")
     String getBaseUrl();
 
-    @Key("cookie")
-    String getCookie();
+    @Key("uuidToken")
+    String getUuidToken();
 
 }
